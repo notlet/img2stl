@@ -1,4 +1,6 @@
-## img2stl turns a two-color (black & white) image into a 3D-printable STL file.
+*This tool was written mostly by Claude 5.5 but it works well enough.*
+
+## img2stl turns a two-color image into a 3D-printable STL file.
 
 - white pixels -> base height
 - black pixels -> raised by -raise millimetres 
@@ -6,7 +8,7 @@
 
 No external libraries are needed. 
 PNG, JPEG and GIF inputs are accepted.
-Ideally accepts a purely black and white image, colored outputs might not work as expected.
+Works ideally with a purely black and white image, colored outputs might not work as expected.
 
 The result is a single watertight solid, a flat slab `-base` mm thick with black areas raised by `-raise` mm.
 

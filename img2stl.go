@@ -129,7 +129,7 @@ func (b *builder) build(state [][]uint8) {
 	// 1. Top and bottom faces, one strip per run of identical pixels. Using
 	// runs instead of single pixels keeps the file small, and the extra points
 	// taken from the neighbouring rows keep the mesh free of gaps.
-	for y := 0; y < h; y++ {
+	for y := range h {
 		for k := 0; k+1 < len(edges[y]); k++ {
 			x0, x1 := edges[y][k], edges[y][k+1]
 			z := ht[state[y][x0]]
