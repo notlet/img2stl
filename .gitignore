@@ -1,0 +1,6 @@
+# Don't include test files in repo
+*.stl
+*.jpg
+*.png
+
+dist/*
