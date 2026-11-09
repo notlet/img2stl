@@ -1,8 +1,8 @@
 *This tool was written mostly by Claude 5.5 but it works well enough.*
 
 ## img2stl turns a two-color image into a 3D-printable STL file.
-[![made-with-Go](https://img.shields.io/badge/Made%20with-Go-00acd9.svg)](https://go.dev/)
-![AUR Version](https://img.shields.io/aur/version/img2stl)
+[![Made with Go](https://img.shields.io/badge/Made%20with-Go-00acd9.svg)](https://go.dev/)
+[![AUR version](https://img.shields.io/aur/version/img2stl)](https://aur.archlinux.org/packages/img2stl)
 
 - white pixels -> base height
 - black pixels -> raised by -raise millimetres 
