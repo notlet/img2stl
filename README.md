@@ -1,6 +1,8 @@
 *This tool was written mostly by Claude 5.5 but it works well enough.*
 
 ## img2stl turns a two-color image into a 3D-printable STL file.
+[![made-with-Go](https://img.shields.io/badge/Made%20with-Go-00acd9.svg)](https://go.dev/)
+![AUR Version](https://img.shields.io/aur/version/img2stl)
 
 - white pixels -> base height
 - black pixels -> raised by -raise millimetres 
@@ -25,4 +27,9 @@ img2stl -px 0.2 -base 1.5 -raise 0.8 -o output.stl input.png
 
 # setback mode
 img2stl -setback 2 input.png
+```
+
+## Building for yourself
+```sh
+go build -ldflags "-X main.COMMIT=$(git rev-parse --short HEAD)" -o dist/img2stl img2stl.go
 ```

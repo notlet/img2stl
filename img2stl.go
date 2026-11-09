@@ -1,7 +1,6 @@
 package main
 
 import (
-	"strings"
 	"bufio"
 	"encoding/binary"
 	"flag"
@@ -12,7 +11,10 @@ import (
 	_ "image/png"
 	"math"
 	"os"
+	"strings"
 )
+
+var COMMIT string
 
 type vec [3]float32
 type triangle [3]vec
@@ -381,8 +383,12 @@ func main() {
 	base := flag.Float64("base", 1.0, "thickness of the white slab in mm")
 	raise := flag.Float64("raise", 0.1, "thickness of black areas in mm")
 	setback := flag.Float64("setback", -1, "shape the white slab to outline the black areas plus setback in mm")
-	invert := flag.Bool("invert", false, "raise the white areas instead of the black ones")
+	invert := flag.Bool("i", false, "raise the white areas instead of the black ones")
 	output := flag.String("o", "", "output file name (when empty same as input)")
+
+
+	var version *bool
+	if COMMIT != "" { version = flag.Bool("v", false, "print version and exit") }
 
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: %s [options] input.png\n", os.Args[0])
@@ -390,11 +396,17 @@ func main() {
 	}
 
 	flag.Parse()
+
+	if *version {
+		fmt.Printf("img2stl commit %s\n", COMMIT)
+		os.Exit(0)
+	}
+
 	if flag.NArg() != 1 {
 		flag.Usage()
 		os.Exit(2)
 	}
-	
+
 	if *px <= 0 || *base < 0 || *raise <= 0 {
 		check(fmt.Errorf("-px and -raise must be greater than 0, and -base must not be negative"))
 	}
@@ -402,10 +414,10 @@ func main() {
 	outname := *output
 	if outname == "" {
 		split := strings.Split(flag.Arg(0), ".")
-		if len(split) > 1 { 
-			split[len(split) - 1] = "stl" 
-		} else { 
-			split = append(split, "stl") 
+		if len(split) > 1 {
+			split[len(split)-1] = "stl"
+		} else {
+			split = append(split, "stl")
 		}
 
 		outname = strings.Join(split, ".")
