@@ -1,24 +1,3 @@
-// img2stl turns a two-colour (black & white) image into a 3D-printable STL file.
-//
-//	white pixels -> flat, at the base height
-//	black pixels -> raised by -raise millimetres (default 0.1)
-//
-// Only the Go standard library is needed. PNG, JPEG and GIF input work.
-//
-//	go run img2stl.go input.png output.stl
-//	go run img2stl.go -px 0.2 -base 1.5 input.png output.stl
-//	go run img2stl.go -setback 2 input.png output.stl
-//
-// The result is a single watertight solid: a flat slab (-base mm thick) whose
-// top face has the black areas raised by -raise mm.
-//
-// -base 0 removes the slab: the model is then just the black areas as a
-// -raise mm thick layer, and the white areas are left empty.
-//
-// -setback S crops the slab to the shape of the black areas grown outwards by
-// S mm, so it hugs the outlines with rounded corners instead of staying a
-// rectangle. White areas completely enclosed by black (the middle of an "O")
-// stay part of the slab. The crop never extends past the edge of the image.
 package main
 
 import (
@@ -398,21 +377,24 @@ func check(err error) {
 }
 
 func main() {
-	px := flag.Float64("px", 0.1, "size of one image pixel in mm")
-	base := flag.Float64("base", 1.0, "thickness of the flat (white) slab in mm; 0 = only the black layer, no slab")
-	raise := flag.Float64("raise", 0.1, "how far the black areas stick up in mm")
-	setback := flag.Float64("setback", -1, "crop the slab to the black areas plus this setback in mm (default: no crop, keep the whole rectangle)")
+	px := flag.Float64("px", 0.1, "scale of one image pixel in mm")
+	base := flag.Float64("base", 1.0, "thickness of the white slab in mm")
+	raise := flag.Float64("raise", 0.1, "thickness of black areas in mm")
+	setback := flag.Float64("setback", -1, "shape the white slab to outline the black areas plus setback in mm")
 	invert := flag.Bool("invert", false, "raise the white areas instead of the black ones")
-	output := flag.String("o", "", "output file name (when empty, same as input)")
+	output := flag.String("o", "", "output file name (when empty same as input)")
+
 	flag.Usage = func() {
 		fmt.Fprintf(os.Stderr, "usage: %s [options] input.png\n", os.Args[0])
 		flag.PrintDefaults()
 	}
+
 	flag.Parse()
 	if flag.NArg() != 1 {
 		flag.Usage()
 		os.Exit(2)
 	}
+	
 	if *px <= 0 || *base < 0 || *raise <= 0 {
 		check(fmt.Errorf("-px and -raise must be greater than 0, and -base must not be negative"))
 	}
